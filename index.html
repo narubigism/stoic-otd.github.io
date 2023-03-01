@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DAILY STOIC QUOTES</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-black text-white font-display">
+  <header class="flex items-center justify-between px-16 py-16">
+    <h1 class="text-2xl font-bold font-serif">SOTD</h1>
+  </header>
+
+  <main class="flex items-center justify-center h-screen">
+    <div class="text-center">
+      <h2 class="text-3xl mb-4 font-serif tracking-wider">TODAY QUOTE IS</h2>
+      <p class="text-lg mb-4 font-serif" id="quote"></p>
+      <p class="text-xl font-bold">Time Remaining </p>
+      <div id="countdown" class="text-xl font-bold"></div>
+    </div>
+<script>
+    const url = "https://stoicquotesapi.com/v1/api/quotes/random";
+    const quoteElement = document.getElementById("quote");
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        quoteElement.textContent = `"${data.body}" - ${data.author}`;
+      })
+      .catch(error => {
+        console.error(error);
+        quoteElement.textContent = "Failed to fetch a quote.";
+        
+      });
+      
+let endTime = new Date();
+endTime.setHours(24, 0, 0, 0);
+
+
+let countdown = document.getElementById("countdown");
+
+
+function updateCountdown() {
+  let now = new Date();
+
+  let timeDiff = endTime.getTime() - now.getTime();
+
+  if (timeDiff < 0) {
+    endTime.setDate(endTime.getDate() + 1);
+    endTime.setHours(24, 0, 0, 0);
+    timeDiff = endTime.getTime() - now.getTime();
+  }
+
+  let hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  let minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+  let seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+  countdown.innerHTML = hours + " Hours, " + minutes + " Minutes, " + seconds + " seconds";
+}
+
+setInterval(updateCountdown, 1000);
+    </script>
+  </main>
+  <footer>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-center items-center">
+        <p class="text-gray-300 justify-center">Made by ERGE with <span class="text-red-600">&hearts; </p>
+    </div>
+</footer>
+
+  
+</body>
+
+
+</html>
